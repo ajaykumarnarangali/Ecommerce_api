@@ -35,6 +35,7 @@ module.exports.addProduct = async (req, res, next) => {
 
 module.exports.getAllProducts = async (req, res, next) => {
     try {
+        const order=req.query.sort?req.query.sort=="asc"?1:-1:-1;
         const products = await Product.find({
             ...(req.query.id && { _id: req.query.id }),
             ...(req.query.searchTerm &&
@@ -46,7 +47,7 @@ module.exports.getAllProducts = async (req, res, next) => {
                 }
             ),
             ...(req.query.category && { category: req.query.category })
-        }).sort({ createdAt: -1 });
+        }).sort({ createdAt: -1 ,sellingPrice:order});
         res.status(200).json({ products });
 
     } catch (error) {
